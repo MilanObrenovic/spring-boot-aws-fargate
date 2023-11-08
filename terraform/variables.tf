@@ -22,3 +22,8 @@ variable "private_subnets_cidr" {
   type        = list(any)
   description = "CIDR block for Private Subnet."
 }
+
+variable "ecr_repository_name" {
+  type        = string
+  description = "Repository name of the ECR."
+}
