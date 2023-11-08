@@ -65,18 +65,22 @@ jobs:
         run: |
           aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
 
-      - name: Build Docker Image
-        id: build-image
+      - name: Gradle Clean Build
+        id: gradle-clean-build
         run: |
           ./gradlew clean build
+
+      - name: Docker Build Image
+        id: docker-build-image
+        run: |
           docker build -t spring-boot-aws-fargate .
 
-      - name: Tag Docker Image
-        id: tag-image
+      - name: Docker Tag Image
+        id: docker-tag-image
         run: |
           docker tag spring-boot-aws-fargate:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/spring-boot-aws-fargate:latest
 
-      - name: Push Docker Image to ECR
-        id: push-image
+      - name: Docker Push Image to ECR
+        id: docker-push-image-to-ecr
         run: |
           docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/spring-boot-aws-fargate:latest
