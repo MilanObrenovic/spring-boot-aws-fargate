@@ -47,7 +47,7 @@ jobs:
       - name: Login to ECR
         id: ecr-login
         run: |
-          aws ecr get-login-password --region ${{ env.AWS_DEFAULT_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com
+          aws ecr get-login-password --region ${{ vars.AWS_DEFAULT_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com
 
       - name: Build Docker Image
         id: build-image
@@ -57,9 +57,9 @@ jobs:
       - name: Tag Docker Image
         id: tag-image
         run: |
-          docker tag spring-boot-aws-fargate:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com/spring-boot-aws-fargate:latest
+          docker tag spring-boot-aws-fargate:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/spring-boot-aws-fargate:latest
 
       - name: Push Docker Image to ECR
         id: push-image
         run: |
-          docker push ${{ secrets.AWS_ACCOUNT_ID }}}.dkr.ecr.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com/spring-boot-aws-fargate:latest
+          docker push ${{ secrets.AWS_ACCOUNT_ID }}}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/spring-boot-aws-fargate:latest
