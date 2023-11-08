@@ -1,1 +1,9 @@
-
+management:
+  info:
+    env:
+      enabled: true
+  endpoints:
+    web:
+      basePath: "/actuator"
+      exposure:
+        include: "*"
