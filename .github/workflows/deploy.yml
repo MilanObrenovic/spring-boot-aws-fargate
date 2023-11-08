@@ -62,6 +62,7 @@ jobs:
       - name: Build Docker Image
         id: build-image
         run: |
+          ./gradlew clean build
           docker build -t spring-boot-aws-fargate .
 
       - name: Tag Docker Image
