@@ -12,6 +12,7 @@ env:
 
 jobs:
   build-infrastructure:
+    if: false
     name: Terraform CI/CD
     runs-on: ubuntu-latest
     steps:
