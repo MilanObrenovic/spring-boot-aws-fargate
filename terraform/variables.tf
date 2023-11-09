@@ -27,3 +27,8 @@ variable "ecr_repository_name" {
   type        = string
   description = "Repository name of the ECR."
 }
+
+variable "rds_subnet_group_name" {
+  type        = string
+  description = "Name of the RDS Subnet Group."
+}

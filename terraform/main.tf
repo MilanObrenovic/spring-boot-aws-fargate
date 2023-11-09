@@ -14,7 +14,9 @@ module "ecr" {
 }
 
 module "rds" {
-	source               = "./modules/rds"
-	environment          = var.environment
-	private_subnets_cidr = module.vpc.private_subnet_ids
+	source                = "./modules/rds"
+	environment           = var.environment
+	rds_subnet_group_name = var.rds_subnet_group_name
+	private_subnets_cidr  = module.vpc.private_subnet_ids
+	vpc_id                = module.vpc.vpc_id
 }
