@@ -9,5 +9,12 @@ module "vpc" {
 
 module "ecr" {
 	source              = "./modules/ecr"
+	environment         = var.environment
 	ecr_repository_name = var.ecr_repository_name
+}
+
+module "rds" {
+	source               = "./modules/rds"
+	environment          = var.environment
+	private_subnets_cidr = module.vpc.private_subnet_ids
 }

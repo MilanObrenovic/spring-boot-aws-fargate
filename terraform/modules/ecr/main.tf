@@ -19,4 +19,9 @@ resource "aws_ecr_repository" "terraform_aws_fargate_repository" {
 		# Encrypts images stored in this repository, instead of using the default encryption settings.
 		encryption_type = "KMS"
 	}
+
+	tags = {
+		Name        = "${var.environment}-ecr"
+		Environment = var.environment
+	}
 }
