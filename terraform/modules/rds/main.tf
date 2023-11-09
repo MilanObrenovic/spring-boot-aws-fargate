@@ -30,7 +30,7 @@ resource "aws_security_group" "rds_security_group" {
 	}
 
 	tags = {
-		Name        = "${var.environment}-security-group"
+		Name        = "${var.environment}-rds-security-group"
 		Environment = var.environment
 	}
 }

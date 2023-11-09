@@ -20,3 +20,10 @@ module "rds" {
 	private_subnets_cidr  = module.vpc.private_subnet_ids
 	vpc_id                = module.vpc.vpc_id
 }
+
+module "sg" {
+	source         = "./modules/sg"
+	environment    = var.environment
+	vpc_id         = module.vpc.vpc_id
+	vpc_cidr_block = module.vpc.vpc_cidr_block
+}
