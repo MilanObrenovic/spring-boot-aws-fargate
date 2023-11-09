@@ -6,6 +6,9 @@ resource "aws_ecr_repository" "terraform_aws_fargate_repository" {
 	# IMMUTABLE = prevents image tags from being overwritten by subsequent image pushes using the same tag.
 	image_tag_mutability = "MUTABLE"
 
+	# If enabled, it will delete the entire repository even if there are still some images inside.
+	force_delete = true
+
 	image_scanning_configuration {
 		# If enabled, each image will be automatically scanned after being pushed to the repository.
 		# If disabled, each image scan must be manually started to get scan results.
