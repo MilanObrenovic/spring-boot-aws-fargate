@@ -38,6 +38,27 @@ resource "aws_subnet" "private_subnets" {
 	}
 }
 
+# Routing tables to route traffic for Private Subnet
+resource "aws_route_table" "private_route_table" {
+	vpc_id = aws_vpc.vpc.id
+	count  = length(var.private_subnets_cidr)
+
+	tags = {
+		Name        = "${var.environment}-${element(local.availability_zones, count.index)}-private-route-table"
+		Environment = var.environment
+	}
+}
+
+# Routing tables to route traffic for Public Subnet
+resource "aws_route_table" "public_route_table" {
+	vpc_id = aws_vpc.vpc.id
+
+	tags = {
+		Name        = "${var.environment}-public-route-table"
+		Environment = var.environment
+	}
+}
+
 # Internet Gateway (IGW)
 resource "aws_internet_gateway" "igw" {
 	vpc_id = aws_vpc.vpc.id
@@ -67,36 +88,17 @@ resource "aws_nat_gateway" "nat" {
 	}
 }
 
-# Routing tables to route traffic for Private Subnet
-resource "aws_route_table" "private_rt" {
-	vpc_id = aws_vpc.vpc.id
-
-	tags = {
-		Name        = "${var.environment}-private-route-table"
-		Environment = var.environment
-	}
-}
-
-# Routing tables to route traffic for Public Subnet
-resource "aws_route_table" "public_rt" {
-	vpc_id = aws_vpc.vpc.id
-
-	tags = {
-		Name        = "${var.environment}-public-route-table"
-		Environment = var.environment
-	}
-}
-
-# Route for Internet Gateway
+# Route for Internet Gateway (IGW)
 resource "aws_route" "public_internet_gateway" {
-	route_table_id         = aws_route_table.public_rt.id
+	route_table_id         = aws_route_table.public_route_table.id
 	gateway_id             = aws_internet_gateway.igw.id
 	destination_cidr_block = "0.0.0.0/0"
 }
 
 # Route for NAT Gateway
 resource "aws_route" "private_internet_gateway" {
-	route_table_id         = aws_route_table.private_rt.id
+	count                  = length(var.private_subnets_cidr)
+	route_table_id         = element(aws_route_table.private_route_table.*.id, count.index)
 	gateway_id             = aws_nat_gateway.nat.id
 	destination_cidr_block = "0.0.0.0/0"
 }
@@ -105,12 +107,12 @@ resource "aws_route" "private_internet_gateway" {
 resource "aws_route_table_association" "public" {
 	count          = length(var.public_subnets_cidr)
 	subnet_id      = element(aws_subnet.public_subnets.*.id, count.index)
-	route_table_id = aws_route_table.public_rt.id
+	route_table_id = aws_route_table.public_route_table.id
 }
 
 # Route table associations for Private Subnets
 resource "aws_route_table_association" "private" {
 	count          = length(var.private_subnets_cidr)
 	subnet_id      = element(aws_subnet.private_subnets.*.id, count.index)
-	route_table_id = aws_route_table.private_rt.id
+	route_table_id = element(aws_route_table.private_route_table.*.id, count.index)
 }

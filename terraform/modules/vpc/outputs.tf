@@ -15,3 +15,7 @@ output "private_subnet_ids" {
 	# Star takes ALL the subnets in this resource and creates a list
 	value = aws_subnet.private_subnets.*.id
 }
+
+output "vpc_arn" {
+	value = aws_vpc.vpc.arn
+}

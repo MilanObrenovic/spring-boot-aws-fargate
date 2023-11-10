@@ -47,14 +47,14 @@ jobs:
       - name: Docker Build Image
         id: docker-build-image
         run: |
-          docker build -t spring-boot-aws-fargate .
+          docker build -t notes-api .
 
       - name: Docker Tag Image
         id: docker-tag-image
         run: |
-          docker tag spring-boot-aws-fargate:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/spring-boot-aws-fargate:latest
+          docker tag notes-api:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/notes-api:latest
 
       - name: Docker Push Image to ECR
         id: docker-push-image-to-ecr
         run: |
-          docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/spring-boot-aws-fargate:latest
+          docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/notes-api:latest

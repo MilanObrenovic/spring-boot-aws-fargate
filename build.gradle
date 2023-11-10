@@ -8,6 +8,27 @@ plugins {
 group = "com.example"
 version = "0.0.1-SNAPSHOT"
 
+ext {
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter
+    set("orgSpringframeworkBoot_springBootStarterVersion", "3.1.5")
+    set("orgSpringframeworkBoot_springBootStarterWebVersion", "${orgSpringframeworkBoot_springBootStarterVersion}")
+    set("orgSpringframeworkBoot_springBootStarterDataJpaVersion", "${orgSpringframeworkBoot_springBootStarterVersion}")
+    set("orgSpringframeworkBoot_springBootStarterActuatorVersion", "${orgSpringframeworkBoot_springBootStarterVersion}")
+    set("orgSpringframeworkBoot_springBootStarterTestVersion", "${orgSpringframeworkBoot_springBootStarterVersion}")
+
+    // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-dependencies
+    set("orgSpringframeworkCloud_springCloudDependenciesVersion", "2022.0.4")
+
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    set("orgApacheCommons_commonsLang3Version", "3.13.0")
+
+    // https://mvnrepository.com/artifact/org.projectlombok/lombok
+    set("orgProjectlombok_lombokVersion", "1.18.30")
+
+    // https://mvnrepository.com/artifact/org.postgresql/postgresql
+    set("orgPostgresql_postgresqlVersion", "42.6.0")
+}
+
 java {
     sourceCompatibility = "17"
 }
@@ -23,16 +44,28 @@ repositories {
 }
 
 dependencies {
-    implementation "org.springframework.boot:spring-boot-starter-web:3.1.5"
-    implementation "org.springframework.boot:spring-boot-starter-actuator:3.1.5"
-    compileOnly "org.projectlombok:lombok:1.18.30"
-    annotationProcessor "org.projectlombok:lombok:1.18.30"
-    testImplementation "org.springframework.boot:spring-boot-starter-test:3.1.5"
+    // Implementations
+    implementation "org.springframework.boot:spring-boot-starter-web:${orgSpringframeworkBoot_springBootStarterWebVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa:${orgSpringframeworkBoot_springBootStarterDataJpaVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-actuator:${orgSpringframeworkBoot_springBootStarterActuatorVersion}"
+    implementation "org.apache.commons:commons-lang3:${orgApacheCommons_commonsLang3Version}"
+
+    // Compile only
+    compileOnly "org.projectlombok:lombok:${orgProjectlombok_lombokVersion}"
+
+    // Annotation processors
+    annotationProcessor "org.projectlombok:lombok:${orgProjectlombok_lombokVersion}"
+
+    // Runtime only
+    runtimeOnly "org.postgresql:postgresql:${orgPostgresql_postgresqlVersion}"
+
+    // Test implementations
+    testImplementation "org.springframework.boot:spring-boot-starter-test:${orgSpringframeworkBoot_springBootStarterTestVersion}"
 }
 
 dependencyManagement {
     imports {
-        mavenBom "org.springframework.cloud:spring-cloud-dependencies:2022.0.4"
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${orgSpringframeworkCloud_springCloudDependenciesVersion}"
     }
 }
 
@@ -41,7 +74,7 @@ jib {
         image = "eclipse-temurin:17"
     }
     to {
-        image = "spring-boot-aws-fargate"
+        image = "notes-api"
         tags = ["latest"]
     }
 }

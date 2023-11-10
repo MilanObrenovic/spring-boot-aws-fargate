@@ -1,5 +1,5 @@
 # Elastic Container Registry (ECR) Repository
-resource "aws_ecr_repository" "terraform_aws_fargate_repository" {
+resource "aws_ecr_repository" "notes_api_repository" {
 	name = var.ecr_repository_name
 
 	# MUTABLE = allows image tags to be overwritten.
