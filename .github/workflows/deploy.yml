@@ -25,6 +25,12 @@ jobs:
       - name: Run Docker Compose
         run: docker compose up -d
 
+      - name: Create Database
+        run: |
+          docker exec -it postgres bash
+          psql -U postgres
+          CREATE DATABASE notes_db;
+
       - name: Install Java 17
         uses: actions/setup-java@v3
         with:
