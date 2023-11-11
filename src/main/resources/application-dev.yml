@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${AWS_RDS_DATABASE_HOST}:5432/${AWS_RDS_DATABASE}?useSSL=false&allowPublicKeyRetrieval=true&autoReconnect=true
+    username: ${AWS_RDS_DATABASE_USERNAME}
+    password: ${AWS_RDS_DATABASE_PASSWORD}
+    driverClassName: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddlAuto: update
+    showSql: false
+
+  # Performance optimization purposes, makes SQL execute faster
+  databasePlatform: org.hibernate.dialect.PostgreSQLDialect
+
+# Cors config
+cors:
+  allowedOrigins: "http://localhost:3000,http://localhost:4200"
+  allowedMethods: "POST,GET,PUT,DELETE"
+  allowedHeaders: "*"
+  exposedHeaders: "*"
