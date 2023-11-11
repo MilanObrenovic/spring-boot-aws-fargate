@@ -10,8 +10,7 @@ env:
   AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
-  AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-  DOCKER_IMAGE: notes-api
+  AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}=
 
 jobs:
   build-and-deploy:
@@ -55,14 +54,14 @@ jobs:
       - name: Docker Build Image
         id: docker-build-image
         run: |
-          docker build -t $DOCKER_IMAGE .
+          docker build -t notes-api .
 
       - name: Docker Tag Image
         id: docker-tag-image
         run: |
-          docker tag $DOCKER_IMAGE:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$DOCKER_IMAGE:latest
+          docker tag notes-api:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/notes-api:latest
 
       - name: Docker Push Image to ECR
         id: docker-push-image-to-ecr
         run: |
-          docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$DOCKER_IMAGE:latest
+          docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/notes-api:latest
