@@ -9,32 +9,6 @@ resource "aws_db_subnet_group" "rds_subnet_group" {
 	}
 }
 
-# Security Group (SG)
-resource "aws_security_group" "rds_security_group" {
-	name        = "spring-boot-aws-fargate-rds-security-group"
-	description = "Security group for RDS instance."
-	vpc_id      = var.vpc_id
-
-	ingress {
-		from_port   = 5432
-		to_port     = 5432
-		protocol    = "tcp"
-		cidr_blocks = ["0.0.0.0/0"]
-	}
-
-	egress {
-		from_port   = 0
-		to_port     = 0
-		protocol    = "-1"
-		cidr_blocks = ["0.0.0.0/0"]
-	}
-
-	tags = {
-		Name        = "${var.environment}-rds-security-group"
-		Environment = var.environment
-	}
-}
-
 # PostgreSQL RDS
 resource "aws_db_instance" "rds" {
 	# Engine options
@@ -42,7 +16,7 @@ resource "aws_db_instance" "rds" {
 	engine_version = "15.3"
 
 	# Settings
-	db_name  = "spring_boot_aws_fargate_db"
+	db_name  = "notes_db"
 	username = "postgres"
 	password = "password"
 
@@ -55,7 +29,7 @@ resource "aws_db_instance" "rds" {
 
 	# Connectivity
 	network_type           = "IPV4"
-	vpc_security_group_ids = [aws_security_group.rds_security_group.id]
+	vpc_security_group_ids = [var.rds_security_group_id]
 	db_subnet_group_name   = aws_db_subnet_group.rds_subnet_group.name
 	publicly_accessible    = false
 	ca_cert_identifier     = "rds-ca-2019"

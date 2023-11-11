@@ -1,6 +1,6 @@
 # Security Group (SG) for Application Load Balancer (ALB)
-resource "aws_security_group" "ecs_alb_security_group" {
-	name        = "ecs-app-load-balancer-sg"
+resource "aws_security_group" "notes_alb_security_group" {
+	name        = "notes-alb-sg"
 	description = "Security group for ECS ALB."
 	vpc_id      = var.vpc_id
 
@@ -19,14 +19,14 @@ resource "aws_security_group" "ecs_alb_security_group" {
 	}
 
 	tags = {
-		Name        = "${var.environment}-ecs-alb-security-group"
+		Name        = "${var.environment}-notes-alb-security-group"
 		Environment = var.environment
 	}
 }
 
 # Security Group (SG) for API containers
-resource "aws_security_group" "ecs_app_fargate_security_group" {
-	name        = "ecs-app-fargate-sg"
+resource "aws_security_group" "notes_fargate_security_group" {
+	name        = "notes-fargate-sg"
 	description = "Security group for ECS API containers."
 	vpc_id      = var.vpc_id
 
@@ -35,7 +35,7 @@ resource "aws_security_group" "ecs_app_fargate_security_group" {
 		to_port         = 8080
 		protocol        = "tcp"
 		cidr_blocks     = [var.vpc_cidr_block]
-		security_groups = [aws_security_group.ecs_alb_security_group.id]
+		security_groups = [aws_security_group.notes_alb_security_group.id]
 	}
 
 	egress {
@@ -46,23 +46,23 @@ resource "aws_security_group" "ecs_app_fargate_security_group" {
 	}
 
 	tags = {
-		Name        = "${var.environment}-ecs-app-fargate-security-group"
+		Name        = "${var.environment}-notes-fargate-security-group"
 		Environment = var.environment
 	}
 }
 
 # Security Group (SG) for RDS database
-resource "aws_security_group" "rds_security_group" {
-	name        = "ecs-app-fargate-sg"
-	description = "Security group for ECS API containers."
+resource "aws_security_group" "notes_rds_security_group" {
+	name        = "notes-rds-sg"
+	description = "Security group for RDS database."
 	vpc_id      = var.vpc_id
 
 	ingress {
-		from_port       = 8080
-		to_port         = 8080
+		from_port       = 5432
+		to_port         = 5432
 		protocol        = "tcp"
 		cidr_blocks     = [var.vpc_cidr_block]
-		security_groups = [aws_security_group.ecs_alb_security_group.id]
+		security_groups = [aws_security_group.notes_fargate_security_group.id]
 	}
 
 	egress {
@@ -73,7 +73,7 @@ resource "aws_security_group" "rds_security_group" {
 	}
 
 	tags = {
-		Name        = "${var.environment}-ecs-app-fargate-security-group"
+		Name        = "${var.environment}-notes-rds-security-group"
 		Environment = var.environment
 	}
 }

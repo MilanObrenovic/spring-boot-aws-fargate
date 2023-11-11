@@ -17,3 +17,8 @@ variable "vpc_id" {
 	type        = string
 	description = "VPC ID for Security Group."
 }
+
+variable "rds_security_group_id" {
+	type        = string
+	description = "RDS Security Group ID."
+}
