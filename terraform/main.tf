@@ -28,3 +28,8 @@ module "rds" {
 	vpc_id                = module.vpc.vpc_id
 	rds_security_group_id = module.sg.notes_rds_security_group_id
 }
+
+module "ecs" {
+	source      = "./modules/ecs"
+	environment = var.environment
+}
