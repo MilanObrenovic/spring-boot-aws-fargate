@@ -1,7 +1,8 @@
 # Subnet groups
 resource "aws_db_subnet_group" "rds_subnet_group" {
-	name       = var.rds_subnet_group_name
-	subnet_ids = var.private_subnets_cidr
+	name        = var.rds_subnet_group_name
+	description = var.rds_subnet_group_name
+	subnet_ids  = var.private_subnets_cidr
 
 	tags = {
 		Name        = "${var.environment}-subnet-group"
@@ -16,9 +17,9 @@ resource "aws_db_instance" "rds" {
 	engine_version = "15.3"
 
 	# Settings
-	db_name  = "notes_db"
-	username = "postgres"
-	password = "password"
+	identifier = "notes-db"
+	username   = "postgres"
+	password   = "password"
 
 	# Instance configuration
 	instance_class = "db.t3.micro"
@@ -33,11 +34,13 @@ resource "aws_db_instance" "rds" {
 	db_subnet_group_name   = aws_db_subnet_group.rds_subnet_group.name
 	publicly_accessible    = false
 	ca_cert_identifier     = "rds-ca-2019"
+	port                   = 5432
 
 	# Additional configuration
-	parameter_group_name      = "default.postgres15"
-	option_group_name         = "default:postgres-15"
-	skip_final_snapshot       = true
+	db_name              = "notes_db"
+	parameter_group_name = "default.postgres15"
+	option_group_name    = "default:postgres-15"
+	skip_final_snapshot  = true
 
 	tags = {
 		Name        = "${var.environment}-rds"

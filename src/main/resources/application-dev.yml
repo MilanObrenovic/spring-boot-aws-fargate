@@ -10,8 +10,13 @@ spring:
       ddlAuto: update
     showSql: false
 
-  # Performance optimization purposes, makes SQL execute faster
-  databasePlatform: org.hibernate.dialect.PostgreSQLDialect
+    # Performance optimization purposes, makes SQL execute faster
+    databasePlatform: org.hibernate.dialect.PostgreSQLDialect
+
+  sql:
+    init:
+      mode: always
+      platform: postgres
 
 # Cors config
 cors:
