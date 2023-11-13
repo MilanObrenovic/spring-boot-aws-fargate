@@ -1,7 +1,7 @@
-# Security Group (SG) for Application Load Balancer (ALB)
-resource "aws_security_group" "notes_alb_security_group" {
-	name        = "notes-alb-sg"
-	description = "Security group for ECS ALB."
+# Security Group (SG) for Application Load Balancer (LB)
+resource "aws_security_group" "notes_lb_security_group" {
+	name        = "notes-lb-sg"
+	description = "Security group for ECS Load Balancer."
 	vpc_id      = var.vpc_id
 
 	ingress {
@@ -19,7 +19,7 @@ resource "aws_security_group" "notes_alb_security_group" {
 	}
 
 	tags = {
-		Name        = "${var.environment}-alb-security-group"
+		Name        = "${var.environment}-lb-security-group"
 		Environment = var.environment
 	}
 }
@@ -35,7 +35,7 @@ resource "aws_security_group" "notes_fargate_security_group" {
 		to_port         = 8080
 		protocol        = "tcp"
 		cidr_blocks     = [var.vpc_cidr_block]
-		security_groups = [aws_security_group.notes_alb_security_group.id]
+		security_groups = [aws_security_group.notes_lb_security_group.id]
 	}
 
 	egress {

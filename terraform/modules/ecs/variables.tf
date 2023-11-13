@@ -13,11 +13,6 @@ variable "rds_database_host_name" {
 	description = "RDS database host name."
 }
 
-variable "aws_iam_role_ecs_task_execution_arn" {
-	type = string
-	description = "IAM role ARN that can execute ECS task."
-}
-
 variable "public_subnets_cidr" {
 	type = list(string)
 	description = "Public VPC subnets."

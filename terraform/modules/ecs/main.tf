@@ -20,6 +20,15 @@ resource "aws_ecs_cluster_capacity_providers" "notes_ecs_cluster_capacity_provid
 	}
 }
 
+# For service discovery
+resource "aws_service_discovery_http_namespace" "notes_service_discovery_http_namespace" {
+	name = aws_ecs_cluster.notes_ecs_cluster.name
+
+	tags = {
+		AmazonECSManaged = "true"
+	}
+}
+
 # Task definition
 resource "aws_ecs_task_definition" "notes_ecs_task_definition" {
 	# Task definition configuration
@@ -28,7 +37,7 @@ resource "aws_ecs_task_definition" "notes_ecs_task_definition" {
 	# Infrastructure requirements
 	requires_compatibilities = ["FARGATE"]
 	network_mode             = "awsvpc"
-	execution_role_arn       = var.aws_iam_role_ecs_task_execution_arn
+	execution_role_arn       = "arn:aws:iam::396280700779:role/ecsTaskExecutionRole"
 	cpu                      = "1 vCPU"
 	memory                   = "3 GB"
 
@@ -42,15 +51,17 @@ resource "aws_ecs_task_definition" "notes_ecs_task_definition" {
 		{
 			name         = "notes-api-container"
 			image        = "${var.ecr_image_uri}:latest"
-			essential    = true
-			cpu          = 10
-			memory       = 512
+			cpu          = 0
 			portMappings = [
 				{
+					name          = "notes-api-container-8080-tcp",
 					containerPort = 8080
-					hostPort      = 8080
+					hostPort      = 8080,
+					protocol      = "tcp",
+					appProtocol   = "http"
 				}
 			],
+			essential   = true
 			environment = [
 				{
 					name  = "AWS_RDS_DATABASE_HOST",
@@ -68,7 +79,11 @@ resource "aws_ecs_task_definition" "notes_ecs_task_definition" {
 					name  = "AWS_RDS_DATABASE_PASSWORD",
 					value = "password"
 				}
-			]
+			],
+			environmentFiles = [],
+			mountPoints      = [],
+			volumesFrom      = [],
+			ulimits          = []
 		}
 	])
 
@@ -92,32 +107,49 @@ resource "aws_lb" "notes_lb" {
 }
 
 resource "aws_lb_target_group" "notes_lb_target_group" {
-	name        = "notes-api-ecs-lb-tg"
-	port        = 80
+	name        = "notes-api-ecs-tg"
 	protocol    = "HTTP"
+	target_type = "ip"
+	port        = 80
 	vpc_id      = var.vpc_id
 
 	health_check {
-		path     = "/actuator/health"
-		protocol = "HTTP"
-		enabled  = true
+		path                = "/actuator/health"
+		protocol            = "HTTP"
+		enabled             = true
+		interval            = 30
+		timeout             = 5
+		healthy_threshold   = 5
+		unhealthy_threshold = 2
 	}
-}
 
-resource "aws_lb_target_group_attachment" "notes_lb_target_group_attachment" {
-	target_group_arn = aws_lb_target_group.notes_lb_target_group.arn
-	target_id        = aws_ecs_service.notes_ecs_service.id
-	port             = 80
+	lifecycle {
+		create_before_destroy = true
+	}
+
+	tags = {
+		Name        = "${var.environment}-ecs-tg"
+		Environment = var.environment
+	}
 }
 
 resource "aws_lb_listener" "notes_lb_listener" {
 	load_balancer_arn = aws_lb.notes_lb.arn
-	port              = 80
 	protocol          = "HTTP"
+	port              = 80
 
 	default_action {
 		type             = "forward"
 		target_group_arn = aws_lb_target_group.notes_lb_target_group.arn
+	}
+
+	lifecycle {
+		create_before_destroy = true
+	}
+
+	tags = {
+		Name        = "${var.environment}-ecs-lb-listener"
+		Environment = var.environment
 	}
 }
 
@@ -127,12 +159,9 @@ resource "aws_ecs_service" "notes_ecs_service" {
 	name                              = "notes-api-service"
 	cluster                           = aws_ecs_cluster.notes_ecs_cluster.id
 	task_definition                   = aws_ecs_task_definition.notes_ecs_task_definition.arn
+	launch_type                       = "FARGATE"
 	desired_count                     = 1
 	health_check_grace_period_seconds = 0
-	depends_on                        = [
-		aws_lb.notes_lb,
-		aws_lb_target_group.notes_lb_target_group,
-	]
 
 	# Networking
 	network_configuration {
