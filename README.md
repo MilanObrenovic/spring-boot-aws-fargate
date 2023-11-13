@@ -1,27 +1,27 @@
-# Getting Started
-
 [![Java Spring Boot + AWS Fargate.](https://github.com/MilanObrenovic/spring-boot-aws-fargate/actions/workflows/main.yml/badge.svg)](https://github.com/MilanObrenovic/spring-boot-aws-fargate/actions/workflows/main.yml)
 
-### Reference Documentation
+# Java Spring Boot + AWS ECS Fargate + DevOps
 
-For further reference, please consider the following sections:
+This repository demonstrates a real-world practical example of deploying a Java Spring Boot backend application to AWS
+ECS Fargate.
+This example is a simple full CRUD Notes application.
 
-* [Official Gradle documentation](https://docs.gradle.org)
-* [Spring Boot Gradle Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/3.1.5/gradle-plugin/reference/html/)
-* [Create an OCI image](https://docs.spring.io/spring-boot/docs/3.1.5/gradle-plugin/reference/html/#build-image)
-* [Spring Web](https://docs.spring.io/spring-boot/docs/3.1.5/reference/htmlsingle/index.html#web)
+# 1. What is an ECS Fargate?
 
-### Guides
+- AWS Elastic Container Service (ECS) Fargate is a fully-managed container orchestration service that allows developers
+	to deploy and manage containers without managing underlying EC2 instances.
 
-The following guides illustrate how to use some features concretely:
+## 1.1. When to use ECS Fargate?
 
-* [Building a RESTful Web Service](https://spring.io/guides/gs/rest-service/)
-* [Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content/)
-* [Building REST services with Spring](https://spring.io/guides/tutorials/rest/)
+- Deploying Java Spring Boot applications with ECS Fargate can be an excellent choice for organizations that want to
+	**reduce infrastructure management overhead** and increase the scalability and reliability of their applications.
+- When combined, Java Spring Boot and AWS ECS Fargate provide a powerful solution for deploying and managing Java
+	applications in a containerized environment.
+- By utilizing Java Spring Boot's ease of development and AWS ECS Fargate's simplicity of deployment, developers can
+	build **scalable** and **highly available** applications that leverage the benefits of containerization.
 
-### Additional Links
+# 2. Architecture
 
-These additional references should also help you:
+This repository models the following Cloud architecture all via Terraform.
 
-* [Gradle Build Scans – insights for your project's build](https://scans.gradle.com#gradle)
-
+![banner.svg](misc/banner.svg)
