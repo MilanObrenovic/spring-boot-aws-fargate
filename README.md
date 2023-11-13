@@ -1,5 +1,7 @@
 # Getting Started
 
+[![Java Spring Boot + AWS Fargate.](https://github.com/MilanObrenovic/spring-boot-aws-fargate/actions/workflows/main.yml/badge.svg)](https://github.com/MilanObrenovic/spring-boot-aws-fargate/actions/workflows/main.yml)
+
 ### Reference Documentation
 
 For further reference, please consider the following sections:
