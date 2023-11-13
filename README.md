@@ -6,6 +6,15 @@ This repository demonstrates a real-world practical example of deploying a Java 
 ECS Fargate.
 This example is a simple full CRUD Notes application.
 
+# 0. Technologies used
+
+| Technology       | Version             |
+|------------------|---------------------|
+| Java Spring Boot | `v3.1.5`            |
+| Docker           | `v24.0.6`           |
+| Docker Compose   | `v2.22.0-desktop.2` |
+| Terraform        | `v1.6.3`            |
+
 # 1. What is an ECS Fargate?
 
 - AWS Elastic Container Service (ECS) Fargate is a fully-managed container orchestration service that allows developers
