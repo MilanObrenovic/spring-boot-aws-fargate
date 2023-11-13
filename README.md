@@ -6,6 +6,9 @@ This repository demonstrates a real-world practical example of deploying a Java 
 ECS Fargate.
 This example is a simple full CRUD Notes application.
 
+A GitHub CI/CD workflow has also been integrated so that on each push to this (`main`) branch, it will automatically
+deploy the latest version of the backend Spring Boot application to AWS Fargate.
+
 # 0. Technologies used
 
 | Technology       | Version             |
