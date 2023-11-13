@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/api/v1/ping")
 public class PingPongController {
 
-    @GetMapping("/pong")
+    @GetMapping()
     public ResponseEntity<String> findPong() {
         return ResponseEntity
                 .status(HttpStatus.OK)
