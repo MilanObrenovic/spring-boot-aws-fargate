@@ -40,4 +40,9 @@ module "ecs" {
 	ecr_image_uri                       = module.ecr.ecr_image_uri
 	rds_database_host_name              = module.rds.rds_database_host_name
 	aws_iam_role_ecs_task_execution_arn = module.iam.aws_iam_role_ecs_task_execution_arn
+	notes_fargate_security_group_id     = module.sg.notes_fargate_security_group_id
+	private_subnets_cidr                = module.vpc.private_subnet_ids
+	vpc_id                              = module.vpc.vpc_id
+	notes_lb_security_group_id          = module.sg.notes_lb_security_group_id
+	public_subnets_cidr                 = module.vpc.public_subnet_ids
 }

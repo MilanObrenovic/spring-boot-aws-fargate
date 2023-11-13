@@ -17,3 +17,28 @@ variable "aws_iam_role_ecs_task_execution_arn" {
 	type = string
 	description = "IAM role ARN that can execute ECS task."
 }
+
+variable "public_subnets_cidr" {
+	type = list(string)
+	description = "Public VPC subnets."
+}
+
+variable "private_subnets_cidr" {
+	type = list(string)
+	description = "Private VPC subnets."
+}
+
+variable "notes_fargate_security_group_id" {
+	type = string
+	description = "Fargate security group."
+}
+
+variable "notes_lb_security_group_id" {
+	type = string
+	description = "Load Balancer security group."
+}
+
+variable "vpc_id" {
+	type = string
+	description = "ID of the VPC to use."
+}

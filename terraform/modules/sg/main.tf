@@ -19,7 +19,7 @@ resource "aws_security_group" "notes_alb_security_group" {
 	}
 
 	tags = {
-		Name        = "${var.environment}-notes-alb-security-group"
+		Name        = "${var.environment}-alb-security-group"
 		Environment = var.environment
 	}
 }
@@ -46,7 +46,7 @@ resource "aws_security_group" "notes_fargate_security_group" {
 	}
 
 	tags = {
-		Name        = "${var.environment}-notes-fargate-security-group"
+		Name        = "${var.environment}-fargate-security-group"
 		Environment = var.environment
 	}
 }
@@ -73,7 +73,7 @@ resource "aws_security_group" "notes_rds_security_group" {
 	}
 
 	tags = {
-		Name        = "${var.environment}-notes-rds-security-group"
+		Name        = "${var.environment}-rds-security-group"
 		Environment = var.environment
 	}
 }
