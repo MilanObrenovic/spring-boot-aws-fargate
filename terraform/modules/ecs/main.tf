@@ -110,7 +110,7 @@ resource "aws_lb_target_group" "notes_lb_target_group" {
 	name        = "notes-api-ecs-tg"
 	protocol    = "HTTP"
 	target_type = "ip"
-	port        = 80
+	port        = 8080
 	vpc_id      = var.vpc_id
 
 	health_check {
@@ -119,7 +119,7 @@ resource "aws_lb_target_group" "notes_lb_target_group" {
 		enabled             = true
 		interval            = 30
 		timeout             = 5
-		healthy_threshold   = 5
+		healthy_threshold   = 10
 		unhealthy_threshold = 2
 	}
 
