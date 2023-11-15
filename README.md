@@ -2,6 +2,8 @@
 
 # Java Spring Boot + AWS ECS Fargate + DevOps
 
+![banner.svg](misc/banner.svg)
+
 This repository demonstrates a real-world practical example of deploying a Java Spring Boot backend application to AWS
 ECS Fargate.
 This example is a simple full CRUD Notes application.
@@ -36,4 +38,4 @@ deploy the latest version of the backend Spring Boot application to AWS Fargate.
 
 This repository models the following Cloud architecture all via Terraform.
 
-![banner.svg](misc/banner.svg)
+![spring-boot-aws-fargate-infrastructure.svg](misc/spring-boot-aws-fargate-infrastructure.svg)
