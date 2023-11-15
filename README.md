@@ -39,3 +39,7 @@ deploy the latest version of the backend Spring Boot application to AWS Fargate.
 This repository models the following Cloud architecture all via Terraform.
 
 ![spring-boot-aws-fargate-infrastructure.svg](misc/spring-boot-aws-fargate-infrastructure.svg)
+
+# 3. Screenshots
+
+![api.png](misc/api.png)
