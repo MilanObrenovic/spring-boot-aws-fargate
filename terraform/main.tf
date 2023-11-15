@@ -42,8 +42,15 @@ module "ecs" {
 }
 
 module "route53" {
-	source            = "./modules/route53"
-	environment       = var.environment
-	notes_lb_dns_name = module.ecs.notes_lb_dns_name
-	notes_lb_zone_id  = module.ecs.notes_lb_zone_id
+	source                                        = "./modules/route53"
+	environment                                   = var.environment
+	notes_lb_dns_name                             = module.ecs.notes_lb_dns_name
+	notes_lb_zone_id                              = module.ecs.notes_lb_zone_id
+	aws_acm_certificate_domain_validation_options = module.acm.aws_acm_certificate_domain_validation_options
+}
+
+module "acm" {
+	source          = "./modules/acm"
+	environment     = var.environment
+	route53_zone_id = module.route53.aws_route53_zone_id
 }

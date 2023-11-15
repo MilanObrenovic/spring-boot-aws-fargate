@@ -2,6 +2,10 @@
 resource "aws_route53_zone" "notes_route53_zone" {
 	name = "milanobrenovic.com"
 
+	lifecycle {
+		create_before_destroy = true
+	}
+
 	tags = {
 		Name        = "${var.environment}-route53-zone"
 		Environment = var.environment
@@ -9,9 +13,9 @@ resource "aws_route53_zone" "notes_route53_zone" {
 }
 
 # Creates an A record for the backend Load Balancer API
-resource "aws_route53_record" "notes_route53_record" {
+resource "aws_route53_record" "notes_route53_record_http" {
 	zone_id = aws_route53_zone.notes_route53_zone.zone_id
-	name    = "api.milanobrenovic.com"
+	name    = "notes-api.milanobrenovic.com"
 	type    = "A"
 
 	alias {
