@@ -1,11 +1,12 @@
 # Creates an SSL certificate for the domain
 resource "aws_acm_certificate" "notes_acm_certificate" {
-	domain_name       = "notes-api.milanobrenovic.com"
+	domain_name       = "*.milanobrenovic.com"
 	validation_method = "DNS"
 	key_algorithm     = "RSA_2048"
 
 	lifecycle {
 		create_before_destroy = true
+		prevent_destroy       = false
 	}
 
 	tags = {
