@@ -14,6 +14,16 @@ variable "notes_lb_zone_id" {
 }
 
 variable "aws_acm_certificate_domain_validation_options" {
-	type = any
+	type        = any
 	description = "Domain validation options from the generated SSL certificate."
+}
+
+variable "route53_zone_name" {
+	type        = string
+	description = "Domain name (such as example.com)."
+}
+
+variable "route53_api_subdomain_name" {
+	type        = string
+	description = "Subdomain name of the backend API."
 }

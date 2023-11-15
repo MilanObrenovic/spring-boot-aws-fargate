@@ -22,3 +22,18 @@ variable "rds_security_group_id" {
 	type        = string
 	description = "RDS Security Group ID."
 }
+
+variable "rds_database_name" {
+	type        = string
+	description = "RDS database name."
+}
+
+variable "rds_database_username" {
+	type        = string
+	description = "RDS database username."
+}
+
+variable "rds_database_password" {
+	type        = string
+	description = "RDS database password."
+}

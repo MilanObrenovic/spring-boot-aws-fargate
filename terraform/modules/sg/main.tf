@@ -1,6 +1,6 @@
 # Security Group (SG) for Application Load Balancer (LB)
 resource "aws_security_group" "notes_lb_security_group" {
-	name        = "notes-lb-sg"
+	name        = var.notes_lb_sg_name
 	description = "Security group for ECS Load Balancer."
 	vpc_id      = var.vpc_id
 
@@ -37,7 +37,7 @@ resource "aws_security_group" "notes_lb_security_group" {
 
 # Security Group (SG) for API containers
 resource "aws_security_group" "notes_fargate_security_group" {
-	name        = "notes-fargate-sg"
+	name        = var.notes_fargate_sg_name
 	description = "Security group for ECS API containers."
 	vpc_id      = var.vpc_id
 
@@ -47,6 +47,7 @@ resource "aws_security_group" "notes_fargate_security_group" {
 		protocol        = "tcp"
 		cidr_blocks     = [var.vpc_cidr_block]
 		security_groups = [aws_security_group.notes_lb_security_group.id]
+		description     = "Allow 8080 traffic from Load Balancer."
 	}
 
 	egress {
@@ -64,7 +65,7 @@ resource "aws_security_group" "notes_fargate_security_group" {
 
 # Security Group (SG) for RDS database
 resource "aws_security_group" "notes_rds_security_group" {
-	name        = "notes-rds-sg"
+	name        = var.notes_rds_sg_name
 	description = "Security group for RDS database."
 	vpc_id      = var.vpc_id
 
@@ -74,6 +75,7 @@ resource "aws_security_group" "notes_rds_security_group" {
 		protocol        = "tcp"
 		cidr_blocks     = [var.vpc_cidr_block]
 		security_groups = [aws_security_group.notes_fargate_security_group.id]
+		description     = "Allow PostgreSQL traffic from Fargate deployment."
 	}
 
 	egress {

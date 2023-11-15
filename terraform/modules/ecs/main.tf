@@ -1,6 +1,6 @@
 # ECS cluster
 resource "aws_ecs_cluster" "notes_ecs_cluster" {
-	name = "notes-api-dev-cluster"
+	name = var.notes_api_dev_cluster_name
 
 	tags = {
 		Name        = "${var.environment}-ecs-cluster"
@@ -8,10 +8,17 @@ resource "aws_ecs_cluster" "notes_ecs_cluster" {
 	}
 }
 
+# NOTE:
+# You can save money in AWS by switching from Fargate to Fargate Spot.
+# If you’re using ECS, Fargate Spot offers significant cost reductions
+# by using spare capacity in the AWS Cloud.
 # Configure the above ECS Cluster to support FARGATE_SPOT instead of FARGATE
 resource "aws_ecs_cluster_capacity_providers" "notes_ecs_cluster_capacity_providers" {
 	cluster_name       = aws_ecs_cluster.notes_ecs_cluster.name
-	capacity_providers = ["FARGATE_SPOT", "FARGATE"]
+	capacity_providers = [
+		"FARGATE_SPOT",
+		"FARGATE",
+	]
 
 	default_capacity_provider_strategy {
 		base              = 0
@@ -32,7 +39,7 @@ resource "aws_service_discovery_http_namespace" "notes_service_discovery_http_na
 # Task definition
 resource "aws_ecs_task_definition" "notes_ecs_task_definition" {
 	# Task definition configuration
-	family = "notes-api-task-definition"
+	family = var.notes_api_task_definition_name
 
 	# Infrastructure requirements
 	requires_compatibilities = ["FARGATE"]
@@ -49,12 +56,12 @@ resource "aws_ecs_task_definition" "notes_ecs_task_definition" {
 	# Container – 1
 	container_definitions = jsonencode([
 		{
-			name         = "notes-api-container"
+			name         = var.notes_api_container_name
 			image        = "${var.ecr_image_uri}:latest"
 			cpu          = 0
 			portMappings = [
 				{
-					name          = "notes-api-container-8080-tcp",
+					name          = var.notes_api_container_name_port_mappings,
 					containerPort = 8080
 					hostPort      = 8080,
 					protocol      = "tcp",
@@ -69,15 +76,15 @@ resource "aws_ecs_task_definition" "notes_ecs_task_definition" {
 				},
 				{
 					name  = "AWS_RDS_DATABASE",
-					value = "notes_db"
+					value = var.rds_database_name
 				},
 				{
 					name  = "AWS_RDS_DATABASE_USERNAME",
-					value = "postgres"
+					value = var.rds_database_username
 				},
 				{
 					name  = "AWS_RDS_DATABASE_PASSWORD",
-					value = "password"
+					value = var.rds_database_password
 				}
 			],
 			environmentFiles = [],
@@ -94,7 +101,7 @@ resource "aws_ecs_task_definition" "notes_ecs_task_definition" {
 }
 
 resource "aws_lb" "notes_lb" {
-	name                       = "notes-api-ecs-lb"
+	name                       = var.notes_api_ecs_lb_name
 	load_balancer_type         = "application"
 	security_groups            = [var.notes_lb_security_group_id]
 	subnets                    = var.public_subnets_cidr
@@ -107,7 +114,7 @@ resource "aws_lb" "notes_lb" {
 }
 
 resource "aws_lb_target_group" "notes_lb_target_group" {
-	name        = "notes-api-ecs-tg"
+	name        = var.notes_api_ecs_tg_name
 	protocol    = "HTTP"
 	target_type = "ip"
 	port        = 8080
@@ -156,7 +163,7 @@ resource "aws_lb_listener" "notes_lb_listener" {
 # ECS service
 resource "aws_ecs_service" "notes_ecs_service" {
 	# Deployment configuration
-	name                              = "notes-api-service"
+	name                              = var.notes_api_service_name
 	cluster                           = aws_ecs_cluster.notes_ecs_cluster.id
 	task_definition                   = aws_ecs_task_definition.notes_ecs_task_definition.arn
 	launch_type                       = "FARGATE"
@@ -172,7 +179,7 @@ resource "aws_ecs_service" "notes_ecs_service" {
 
 	# Load balancing
 	load_balancer {
-		container_name   = "notes-api-container"
+		container_name   = var.notes_api_container_name
 		target_group_arn = aws_lb_target_group.notes_lb_target_group.arn
 		container_port   = 8080
 	}

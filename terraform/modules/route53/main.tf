@@ -1,6 +1,6 @@
 # Create a Route53 Hosted Zone
 resource "aws_route53_zone" "notes_route53_zone" {
-	name = "milanobrenovic.com"
+	name = var.route53_zone_name
 
 	lifecycle {
 		create_before_destroy = true
@@ -15,7 +15,7 @@ resource "aws_route53_zone" "notes_route53_zone" {
 # Creates an A record for the backend Load Balancer API
 resource "aws_route53_record" "notes_route53_record_http" {
 	zone_id = aws_route53_zone.notes_route53_zone.zone_id
-	name    = "notes-api.milanobrenovic.com"
+	name    = var.route53_api_subdomain_name
 	type    = "A"
 
 	alias {

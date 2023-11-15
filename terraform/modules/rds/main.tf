@@ -18,8 +18,8 @@ resource "aws_db_instance" "rds" {
 
 	# Settings
 	identifier = "notes-db"
-	username   = "postgres"
-	password   = "password"
+	username   = var.rds_database_username
+	password   = var.rds_database_password
 
 	# Instance configuration
 	instance_class = "db.t3.micro"
@@ -37,7 +37,7 @@ resource "aws_db_instance" "rds" {
 	port                   = 5432
 
 	# Additional configuration
-	db_name              = "notes_db"
+	db_name              = var.rds_database_name
 	parameter_group_name = "default.postgres15"
 	option_group_name    = "default:postgres-15"
 	skip_final_snapshot  = true
